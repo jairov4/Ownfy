@@ -11,6 +11,7 @@ namespace Ownfy.Server
 	using Lucene.Net.Store;
 	using Lucene.Net.Util;
 	using static System.Threading.Tasks.Task;
+	using static CodeContracts;
 
 	public class LuceneMusicIndexWriter : IMusicIndexWriter
 	{
@@ -18,12 +19,14 @@ namespace Ownfy.Server
 
 		public LuceneMusicIndexWriter(Directory luceneIndexDirectory)
 		{
+			RequiresNotNull(luceneIndexDirectory);
 			var analyzer = new StandardAnalyzer(Version.LUCENE_30);
 			this.writer = new IndexWriter(luceneIndexDirectory, analyzer, IndexWriter.MaxFieldLength.LIMITED);
 		}
 
 		public async Task SaveSong(Song song)
 		{
+			RequiresNotNull(song);
 			var doc = new Document();
 			FillDocument(song, doc);
 			await Run(() => this.writer.AddDocument(doc));

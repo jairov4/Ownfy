@@ -5,6 +5,7 @@
 namespace Ownfy.Server
 {
 	using System;
+	using static CodeContracts;
 
 	public class Song
 	{
@@ -22,6 +23,10 @@ namespace Ownfy.Server
 
 		public Song(string name, string relativePath, string artist, TimeSpan length, DateTime lastModified, int fileLength)
 		{
+			RequiresNotNull(name);
+			RequiresNotNull(relativePath);
+			RequiresNotNull(artist);
+
 			this.Name = name;
 			this.RelativePath = relativePath;
 			this.Artist = artist;

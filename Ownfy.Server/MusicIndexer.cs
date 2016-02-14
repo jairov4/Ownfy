@@ -7,11 +7,14 @@ namespace Ownfy.Server
 	using System.Collections.Generic;
 	using System.IO;
 	using Id3;
+	using static CodeContracts;
 
 	public class MusicIndexer
 	{
 		public IEnumerable<Song> IndexFolder(string path)
 		{
+			RequiresNotNull(path);
+
 			var musicFiles = Directory.GetFiles(path, "*.mp3");
 			foreach (var musicFile in musicFiles)
 			{
