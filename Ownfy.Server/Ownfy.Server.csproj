@@ -100,6 +100,7 @@
   <ItemGroup>
     <Compile Include="Artist.cs" />
     <Compile Include="CodeContracts.cs" />
+    <Compile Include="FlushingStreamResponse.cs" />
     <Compile Include="IMusicIndexWriter.cs" />
     <Compile Include="IMusicRepository.cs" />
     <Compile Include="LuceneDocumentMapper.cs" />
