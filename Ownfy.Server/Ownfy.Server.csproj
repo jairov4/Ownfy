@@ -102,8 +102,10 @@
     <Compile Include="CodeContracts.cs" />
     <Compile Include="IMusicIndexWriter.cs" />
     <Compile Include="IMusicRepository.cs" />
+    <Compile Include="LuceneDocumentMapper.cs" />
     <Compile Include="MusicIndexer.cs" />
     <Compile Include="LuceneMusicIndexWriter.cs" />
+    <Compile Include="MusicRepository.cs" />
     <Compile Include="NancyBootstrapper.cs" />
     <Compile Include="OwnfyWeb.cs" />
     <Compile Include="Program.cs" />

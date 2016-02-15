@@ -15,6 +15,8 @@ namespace Ownfy.Server
 
 	public class LuceneMusicIndexWriter : IMusicIndexWriter
 	{
+		private readonly LuceneDocumentMapper mapper = new LuceneDocumentMapper();
+
 		private readonly IndexWriter writer;
 
 		public LuceneMusicIndexWriter(Directory luceneIndexDirectory)
@@ -28,7 +30,7 @@ namespace Ownfy.Server
 		{
 			RequiresNotNull(song);
 			var doc = new Document();
-			FillDocument(song, doc);
+			this.mapper.FillDocument(song, doc);
 			await Run(() => this.writer.AddDocument(doc));
 		}
 
@@ -41,17 +43,6 @@ namespace Ownfy.Server
 		public async Task Close()
 		{
 			await Run(() => this.writer.Dispose());
-		}
-
-		private static void FillDocument(Song song, Document doc)
-		{
-			doc.Add(new Field(nameof(song.RelativePath), song.RelativePath, Field.Store.YES, Field.Index.ANALYZED));
-			doc.Add(new Field(nameof(song.Name), song.Name, Field.Store.YES, Field.Index.ANALYZED));
-			doc.Add(new Field(nameof(song.Artist), song.Artist, Field.Store.YES, Field.Index.ANALYZED));
-			doc.Add(new NumericField(nameof(song.FileLength), song.FileLength, Field.Store.YES, false));
-			doc.Add(new NumericField(nameof(song.Length), (int)song.Length.TotalMilliseconds, Field.Store.YES, false));
-			doc.Add(new Field(nameof(song.LastModified), DateTools.DateToString(song.LastModified, DateTools.Resolution.SECOND), Field.Store.YES,
-				Field.Index.NOT_ANALYZED));
 		}
 	}
 }
