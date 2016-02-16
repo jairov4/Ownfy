@@ -8,11 +8,13 @@ namespace Ownfy.Server
 	using System.Diagnostics;
 	using System.IO;
 	using Autofac;
+	using Lucene.Net.Analysis.Standard;
 	using Lucene.Net.Index;
 	using Lucene.Net.Store;
 	using Nancy;
 	using Nancy.Hosting.Self;
 	using Directory = Lucene.Net.Store.Directory;
+	using Version = Lucene.Net.Util.Version;
 
 	internal class Program
 	{
@@ -46,22 +48,31 @@ namespace Ownfy.Server
 			builder.RegisterType<LuceneMusicRepository>()
 				.As<IMusicRepository>();
 
-			builder.Register<Directory>(x => InitializeIndexDirectory())
+			builder.Register<Directory>(x => InitializeIndexDirectory(true))
 				.As<Directory>();
-			
+
 			builder.RegisterType<OwnfyWeb>()
-				.UsingConstructor(typeof(string), typeof(IMusicRepository))
+				.UsingConstructor(typeof (string), typeof (IMusicRepository))
 				.WithParameter(new PositionalParameter(0, string.Empty))
-				.As<INancyModule>();
+				.As<INancyModule>()
+				.As<OwnfyWeb>();
 
 			return builder.Build();
 		}
 
-		private static Directory InitializeIndexDirectory()
+		private static Directory InitializeIndexDirectory(bool create)
 		{
 			const string luceneDir = "index";
 			var directoryTemp = FSDirectory.Open(luceneDir);
 			if (IndexWriter.IsLocked(directoryTemp)) IndexWriter.Unlock(directoryTemp);
+
+			if (create)
+			{
+				var w = new IndexWriter(directoryTemp, new StandardAnalyzer(Version.LUCENE_30), true, IndexWriter.MaxFieldLength.LIMITED);
+				w.Commit();
+				w.Dispose();
+			}
+
 			var lockFilePath = Path.Combine(luceneDir, "write.lock");
 			if (File.Exists(lockFilePath)) File.Delete(lockFilePath);
 			return directoryTemp;
