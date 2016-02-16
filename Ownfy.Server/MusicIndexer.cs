@@ -11,10 +11,27 @@ namespace Ownfy.Server
 
 	public class MusicIndexer
 	{
-		public IEnumerable<Song> IndexFolder(string path)
+		private readonly IMusicIndexWriter writer;
+
+		public MusicIndexer(IMusicIndexWriter writer)
+		{
+			this.writer = writer;
+		}
+
+		public void IndexFolder(string path)
 		{
 			RequiresNotNull(path);
 
+			foreach (var song in this.EnumerateSongs(path))
+			{
+				this.writer.SaveSong(song);
+			}
+
+			this.writer.Commit();
+		}
+
+		private IEnumerable<Song> EnumerateSongs(string path)
+		{
 			var musicFiles = Directory.GetFiles(path, "*.mp3");
 			foreach (var musicFile in musicFiles)
 			{

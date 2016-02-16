@@ -98,7 +98,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Artist.cs" />
     <Compile Include="CodeContracts.cs" />
     <Compile Include="FlushingStreamResponse.cs" />
     <Compile Include="IMusicIndexWriter.cs" />

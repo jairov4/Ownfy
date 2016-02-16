@@ -8,6 +8,7 @@ namespace Ownfy.Server
 	using System.Diagnostics;
 	using System.IO;
 	using Autofac;
+	using Lucene.Net.Index;
 	using Lucene.Net.Store;
 	using Nancy;
 	using Nancy.Hosting.Self;
@@ -41,7 +42,7 @@ namespace Ownfy.Server
 			builder.RegisterType<MusicRepository>()
 				.As<IMusicRepository>();
 
-			builder.Register<Directory>(x => FSDirectory.Open(new DirectoryInfo("index")))
+			builder.Register<Directory>(x => InitializeIndexDirectory())
 				.As<Directory>();
 
 			builder.RegisterType<OwnfyWeb>()
@@ -50,6 +51,16 @@ namespace Ownfy.Server
 				.As<INancyModule>();
 
 			return builder.Build();
+		}
+
+		private static Directory InitializeIndexDirectory()
+		{
+			const string luceneDir = "index";
+			var directoryTemp = FSDirectory.Open(luceneDir);
+			if (IndexWriter.IsLocked(directoryTemp)) IndexWriter.Unlock(directoryTemp);
+			var lockFilePath = Path.Combine(luceneDir, "write.lock");
+			if (File.Exists(lockFilePath)) File.Delete(lockFilePath);
+			return directoryTemp;
 		}
 	}
 }

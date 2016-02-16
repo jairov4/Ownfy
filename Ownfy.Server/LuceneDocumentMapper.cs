@@ -35,7 +35,9 @@ namespace Ownfy.Server
 					name,
 					relativePath,
 					artist,
-					new TimeSpan(0, 0, 0, 0, (int)length.NumericValue), lastModified, (int)fileLength.NumericValue);
+					TimeSpan.FromMilliseconds((int)length.NumericValue), 
+					lastModified, 
+					(int)fileLength.NumericValue);
 				yield return song;
 			}
 		}
