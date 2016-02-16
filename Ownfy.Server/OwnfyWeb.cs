@@ -5,6 +5,7 @@
 namespace Ownfy.Server
 {
 	using Nancy;
+	using static CodeContracts;
 
 	public class OwnfyWeb : NancyModule
 	{
@@ -12,10 +13,28 @@ namespace Ownfy.Server
 		/// Initializes a new instance of the <see cref="OwnfyWeb"/> class.
 		/// </summary>
 		/// <param name="path">The path.</param>
-		public OwnfyWeb(string path) : base(path)
+		/// <param name="repository">The music repository</param>
+		public OwnfyWeb(string path, IMusicRepository repository) : base(path)
 		{
-			CodeContracts.RequiresNotNull(path);
-			this.Get["/stream/{id}"] = _ => new Response();
+			RequiresNotNull(path);
+
+			this.Get["/stream/{id:int}"] = parameters =>
+			{
+				var stream = repository.GetSongStream((int)parameters.id);
+				return new FlushingStreamResponse(stream, "audio/mpeg3");
+			};
+
+			this.Get["/artist/{artist}", true] = async (parameters, ct) =>
+			{
+				var artistContents = await repository.SearchSongsByArtist((string)parameters.artist, string.Empty);
+				return artistContents;
+			};
+
+			this.Get["/search/{searchText}", true] = async (parameters, ct) =>
+			{
+				var results = await repository.SearchSong((string)parameters.searchText);
+				return results;
+			};
 		}
 	}
 }

@@ -6,8 +6,12 @@ namespace Ownfy.Server
 {
 	using System;
 	using System.Diagnostics;
+	using System.IO;
 	using Autofac;
+	using Lucene.Net.Store;
+	using Nancy;
 	using Nancy.Hosting.Self;
+	using Directory = Lucene.Net.Store.Directory;
 
 	internal class Program
 	{
@@ -33,6 +37,18 @@ namespace Ownfy.Server
 		private static IContainer Bootstrap()
 		{
 			var builder = new ContainerBuilder();
+
+			builder.RegisterType<MusicRepository>()
+				.As<IMusicRepository>();
+
+			builder.Register<Directory>(x => FSDirectory.Open(new DirectoryInfo("index")))
+				.As<Directory>();
+
+			builder.RegisterType<OwnfyWeb>()
+				.UsingConstructor(typeof(string), typeof(IMusicRepository))
+				.WithParameter(new PositionalParameter(0, string.Empty))
+				.As<INancyModule>();
+
 			return builder.Build();
 		}
 	}

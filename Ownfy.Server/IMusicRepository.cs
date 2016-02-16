@@ -5,6 +5,7 @@
 namespace Ownfy.Server
 {
 	using System.Collections.Generic;
+	using System.IO;
 	using System.Threading.Tasks;
 
 	public interface IMusicRepository
@@ -12,5 +13,7 @@ namespace Ownfy.Server
 		Task<IReadOnlyList<Song>> SearchSongsByArtist(string artist, string searchText);
 
 		Task<IReadOnlyList<Song>> SearchSong(string searchText);
+
+		Stream GetSongStream(int id);
 	}
 }

@@ -48,6 +48,7 @@ namespace Ownfy.Server
 		{
 			RequiresNotNull(container);
 			RequiresNotNull(moduleType);
+
 			object module;
 			return container.TryResolve(moduleType, out module) ? (INancyModule)module : null;
 		}

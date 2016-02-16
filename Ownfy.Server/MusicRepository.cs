@@ -5,14 +5,15 @@
 namespace Ownfy.Server
 {
 	using System.Collections.Generic;
+	using System.IO;
 	using System.Linq;
 	using System.Threading.Tasks;
 	using Lucene.Net.Analysis.Standard;
 	using Lucene.Net.QueryParsers;
 	using Lucene.Net.Search;
-	using Lucene.Net.Store;
 	using Lucene.Net.Util;
 	using static System.Threading.Tasks.Task;
+	using Directory = Lucene.Net.Store.Directory;
 
 	public class MusicRepository : IMusicRepository
 	{
@@ -47,6 +48,13 @@ namespace Ownfy.Server
 			var docs = hits.Select(x => this.searcher.Doc(x.Doc));
 			var results = this.mapper.GetSongs(docs).ToList();
 			return results;
+		}
+
+		public Stream GetSongStream(int id)
+		{
+			var doc = this.searcher.Doc(id);
+			var song = this.mapper.GetSongs(new[] { doc }).First();
+			return File.OpenRead(song.RelativePath);
 		}
 
 		public void Close()
