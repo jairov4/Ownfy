@@ -15,13 +15,13 @@ namespace Ownfy.Server
 	using static System.Threading.Tasks.Task;
 	using Directory = Lucene.Net.Store.Directory;
 
-	public class MusicRepository : IMusicRepository
+	public class LuceneMusicRepository : IMusicRepository
 	{
 		private readonly StandardAnalyzer analyzer = new StandardAnalyzer(Version.LUCENE_30);
 		private readonly LuceneDocumentMapper mapper = new LuceneDocumentMapper();
 		private readonly IndexSearcher searcher;
 
-		public MusicRepository(Directory directory)
+		public LuceneMusicRepository(Directory directory)
 		{
 			this.searcher = new IndexSearcher(directory, true);
 		}

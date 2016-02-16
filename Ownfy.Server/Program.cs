@@ -39,12 +39,16 @@ namespace Ownfy.Server
 		{
 			var builder = new ContainerBuilder();
 
-			builder.RegisterType<MusicRepository>()
+			builder.RegisterType<LuceneMusicIndexWriter>().As<IMusicIndexWriter>();
+
+			builder.RegisterType<MusicIndexer>();
+
+			builder.RegisterType<LuceneMusicRepository>()
 				.As<IMusicRepository>();
 
 			builder.Register<Directory>(x => InitializeIndexDirectory())
 				.As<Directory>();
-
+			
 			builder.RegisterType<OwnfyWeb>()
 				.UsingConstructor(typeof(string), typeof(IMusicRepository))
 				.WithParameter(new PositionalParameter(0, string.Empty))
