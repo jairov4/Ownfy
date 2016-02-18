@@ -7,7 +7,6 @@ namespace Ownfy.Server
 	using System;
 	using System.Collections.Generic;
 	using Lucene.Net.Documents;
-	using Lucene.Net.Util;
 
 	public class LuceneDocumentMapper
 	{
@@ -38,13 +37,13 @@ namespace Ownfy.Server
 		{
 			foreach (var document in documents)
 			{
-				var name = document.Get(nameof(Song.Name));
-				var relativePath = document.Get(nameof(Song.RelativePath));
-				var artist = document.Get(nameof(Song.Artist));
-				var fileLength = NumericUtils.PrefixCodedToInt(document.Get(nameof(Song.FileLength)));
-				var length = NumericUtils.PrefixCodedToInt(document.Get(nameof(Song.Length)));
+				var name = document.Get(nameof(Song.Name)) ?? string.Empty;
+				var relativePath = document.Get(nameof(Song.RelativePath)) ?? string.Empty;
+				var artist = document.Get(nameof(Song.Artist)) ?? string.Empty;
+				var fileLength = int.Parse(document.Get(nameof(Song.FileLength)) ?? "0");
+				var length = int.Parse(document.Get(nameof(Song.Length)) ?? "0");
 				var lastModified = DateTools.StringToDate(document.Get(nameof(Song.LastModified)));
-				
+
 				var song = new Song(
 					name,
 					relativePath,

@@ -5,6 +5,7 @@
 namespace Ownfy.Server
 {
 	using Nancy;
+	using Newtonsoft.Json;
 	using static CodeContracts;
 
 	public class OwnfyWeb : NancyModule
@@ -33,7 +34,7 @@ namespace Ownfy.Server
 			this.Get["/search/{searchText}", true] = async (parameters, ct) =>
 			{
 				var results = await repository.SearchSong((string)parameters.searchText);
-				return results;
+				return JsonConvert.SerializeObject(results);
 			};
 		}
 	}
