@@ -36,9 +36,7 @@ namespace Ownfy.Server
 			if (!string.IsNullOrWhiteSpace(searchText))
 			{
 				var term2 = new TermQuery(new Term(nameof(Song.Name), searchText));
-				var and = new BooleanQuery();
-				and.Add(query, Occur.MUST);
-				and.Add(term2, Occur.SHOULD);
+				var and = new BooleanQuery { { query, Occur.MUST }, { term2, Occur.SHOULD } };
 				query = and;
 			}
 
