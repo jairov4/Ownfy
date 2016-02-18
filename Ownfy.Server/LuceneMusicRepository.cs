@@ -10,7 +10,6 @@ namespace Ownfy.Server
 	using System.Linq;
 	using System.Threading.Tasks;
 	using Lucene.Net.Analysis.Standard;
-	using Lucene.Net.Documents;
 	using Lucene.Net.Index;
 	using Lucene.Net.QueryParsers;
 	using Lucene.Net.Search;
