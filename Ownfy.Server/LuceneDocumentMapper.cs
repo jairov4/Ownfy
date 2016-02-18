@@ -33,10 +33,11 @@ namespace Ownfy.Server
 				Field.Index.NOT_ANALYZED));
 		}
 
-		public IEnumerable<Song> GetSongs(IEnumerable<Document> documents)
+		public IEnumerable<Song> GetSongs(IEnumerable<Tuple<int, Document>> documents)
 		{
-			foreach (var document in documents)
+			foreach (var pair in documents)
 			{
+				var document = pair.Item2;
 				var name = document.Get(nameof(Song.Name)) ?? string.Empty;
 				var relativePath = document.Get(nameof(Song.RelativePath)) ?? string.Empty;
 				var artist = document.Get(nameof(Song.Artist)) ?? string.Empty;
@@ -45,6 +46,7 @@ namespace Ownfy.Server
 				var lastModified = DateTools.StringToDate(document.Get(nameof(Song.LastModified)));
 
 				var song = new Song(
+					pair.Item1,
 					name,
 					relativePath,
 					artist,

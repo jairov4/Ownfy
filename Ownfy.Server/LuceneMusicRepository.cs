@@ -4,16 +4,18 @@
 
 namespace Ownfy.Server
 {
+	using System;
 	using System.Collections.Generic;
 	using System.IO;
 	using System.Linq;
 	using System.Threading.Tasks;
 	using Lucene.Net.Analysis.Standard;
+	using Lucene.Net.Documents;
 	using Lucene.Net.QueryParsers;
 	using Lucene.Net.Search;
-	using Lucene.Net.Util;
 	using static System.Threading.Tasks.Task;
 	using Directory = Lucene.Net.Store.Directory;
+	using Version = Lucene.Net.Util.Version;
 
 	public class LuceneMusicRepository : IMusicRepository
 	{
@@ -33,7 +35,7 @@ namespace Ownfy.Server
 			var fields = new[] { nameof(Song.Artist), nameof(Song.Name) };
 			var query = MultiFieldQueryParser.Parse(Version.LUCENE_30, queries, fields, this.analyzer);
 			var hits = await Run(() => this.searcher.Search(query, null, hits_limit, Sort.RELEVANCE).ScoreDocs);
-			var docs = hits.Select(x => this.searcher.Doc(x.Doc));
+			var docs = hits.Select(x => Tuple.Create(x.Doc, this.searcher.Doc(x.Doc)));
 			var results = this.mapper.GetSongs(docs).ToList();
 			return results;
 		}
@@ -45,7 +47,7 @@ namespace Ownfy.Server
 			var parser = new MultiFieldQueryParser(Version.LUCENE_30, fields, this.analyzer);
 			var query = parser.Parse(searchText);
 			var hits = await Run(() => this.searcher.Search(query, null, hitsLimit, Sort.RELEVANCE).ScoreDocs);
-			var docs = hits.Select(x => this.searcher.Doc(x.Doc));
+			var docs = hits.Select(x => Tuple.Create(x.Doc, this.searcher.Doc(x.Doc)));
 			var results = this.mapper.GetSongs(docs).ToList();
 			return results;
 		}
@@ -53,7 +55,7 @@ namespace Ownfy.Server
 		public Stream GetSongStream(int id)
 		{
 			var doc = this.searcher.Doc(id);
-			var song = this.mapper.GetSongs(new[] { doc }).First();
+			var song = this.mapper.GetSongs(new[] { Tuple.Create(id, doc) }).First();
 			return File.OpenRead(song.RelativePath);
 		}
 

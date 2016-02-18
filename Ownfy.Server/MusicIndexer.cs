@@ -57,7 +57,7 @@ namespace Ownfy.Server
 					}
 					
 					var songFileLen = (int)new FileInfo(musicFile).Length;
-					var song = new Song(title, musicFile, artist, duration, File.GetLastWriteTime(musicFile),
+					var song = new Song(0, title, musicFile, artist, duration, File.GetLastWriteTime(musicFile),
 						songFileLen);
 					yield return song;
 				}

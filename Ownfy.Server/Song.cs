@@ -9,6 +9,8 @@ namespace Ownfy.Server
 
 	public class Song
 	{
+		public int Id { get; }
+
 		public string RelativePath { get; }
 
 		public string Name { get; }
@@ -21,12 +23,13 @@ namespace Ownfy.Server
 
 		public int FileLength { get; }
 
-		public Song(string name, string relativePath, string artist, TimeSpan length, DateTime lastModified, int fileLength)
+		public Song(int id, string name, string relativePath, string artist, TimeSpan length, DateTime lastModified, int fileLength)
 		{
 			RequiresNotNull(name);
 			RequiresNotNull(relativePath);
 			RequiresNotNull(artist);
 
+			this.Id = id;
 			this.Name = name;
 			this.RelativePath = relativePath;
 			this.Artist = artist;
