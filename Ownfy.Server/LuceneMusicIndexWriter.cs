@@ -26,18 +26,18 @@ namespace Ownfy.Server
 			this.writer = new IndexWriter(luceneIndexDirectory, analyzer, IndexWriter.MaxFieldLength.LIMITED);
 		}
 
-		public async Task SaveSong(Song song)
+		public void SaveSong(Song song)
 		{
 			RequiresNotNull(song);
 			var doc = new Document();
 			this.mapper.FillDocument(song, doc);
-			await Run(() => this.writer.AddDocument(doc));
+			this.writer.AddDocument(doc);
 		}
 
-		public async Task Commit()
+		public void Commit()
 		{
-			await Run(() => this.writer.Optimize());
-			await Run(() => this.writer.Commit());
+			this.writer.Commit();
+			this.writer.Optimize();
 		}
 
 		public async Task Close()

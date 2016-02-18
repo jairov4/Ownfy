@@ -40,11 +40,11 @@ namespace Ownfy.Server
 
 		public async Task<IReadOnlyList<Song>> SearchSong(string searchText)
 		{
-			var hits_limit = 1000;
+			var hitsLimit = 1000;
 			var fields = new[] { nameof(Song.Artist), nameof(Song.Name) };
 			var parser = new MultiFieldQueryParser(Version.LUCENE_30, fields, this.analyzer);
 			var query = parser.Parse(searchText);
-			var hits = await Run(() => this.searcher.Search(query, null, hits_limit, Sort.RELEVANCE).ScoreDocs);
+			var hits = await Run(() => this.searcher.Search(query, null, hitsLimit, Sort.RELEVANCE).ScoreDocs);
 			var docs = hits.Select(x => this.searcher.Doc(x.Doc));
 			var results = this.mapper.GetSongs(docs).ToList();
 			return results;

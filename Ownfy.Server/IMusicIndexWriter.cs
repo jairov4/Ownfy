@@ -8,8 +8,8 @@ namespace Ownfy.Server
 
 	public interface IMusicIndexWriter
 	{
-		Task SaveSong(Song song);
+		void SaveSong(Song song);
 
-		Task Commit();
+		void Commit();
 	}
 }

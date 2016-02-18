@@ -34,5 +34,17 @@ namespace Ownfy.Server {
                 this["BaseAddress"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("D:\\Users\\JairoAndres\\Music")]
+        public string LibraryFolder {
+            get {
+                return ((string)(this["LibraryFolder"]));
+            }
+            set {
+                this["LibraryFolder"] = value;
+            }
+        }
     }
 }
