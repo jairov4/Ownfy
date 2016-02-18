@@ -11,6 +11,7 @@ namespace Ownfy.Server
 	using System.Threading.Tasks;
 	using Lucene.Net.Analysis.Standard;
 	using Lucene.Net.Documents;
+	using Lucene.Net.Index;
 	using Lucene.Net.QueryParsers;
 	using Lucene.Net.Search;
 	using static System.Threading.Tasks.Task;
@@ -31,9 +32,16 @@ namespace Ownfy.Server
 		public async Task<IReadOnlyList<Song>> SearchSongsByArtist(string artist, string searchText)
 		{
 			var hits_limit = 1000;
-			var queries = new[] { QueryParser.Escape(artist), searchText };
-			var fields = new[] { nameof(Song.Artist), nameof(Song.Name) };
-			var query = MultiFieldQueryParser.Parse(Version.LUCENE_30, queries, fields, this.analyzer);
+			Query query = new TermQuery(new Term(nameof(Song.Artist), artist));
+			if (!string.IsNullOrWhiteSpace(searchText))
+			{
+				var term2 = new TermQuery(new Term(nameof(Song.Name), searchText));
+				var and = new BooleanQuery();
+				and.Add(query, Occur.MUST);
+				and.Add(term2, Occur.SHOULD);
+				query = and;
+			}
+
 			var hits = await Run(() => this.searcher.Search(query, null, hits_limit, Sort.RELEVANCE).ScoreDocs);
 			var docs = hits.Select(x => Tuple.Create(x.Doc, this.searcher.Doc(x.Doc)));
 			var results = this.mapper.GetSongs(docs).ToList();
