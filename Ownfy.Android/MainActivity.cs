@@ -83,18 +83,7 @@ namespace Ownfy.Android
 
 			return list;
 		}
-
-		private DateTime JsonToDateTime(JSONObject date)
-		{
-			var year = date.GetInt("year");
-			var month = date.GetInt("month");
-			var day = date.GetInt("day");
-			var hour = date.GetInt("hour");
-			var minute = date.GetInt("minute");
-			var second = date.GetInt("second");
-			return new DateTime(year, month, day, hour, minute, second);
-		}
-
+		
 		private TimeSpan JsonToTimeSpan(JSONObject time)
 		{
 			var days = time.GetInt("days");
