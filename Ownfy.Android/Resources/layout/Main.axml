@@ -8,7 +8,7 @@
         android:minHeight="25px"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/searchView1" />
+        android:id="@+id/SearchView" />
     <ListView
         android:minWidth="25px"
         android:minHeight="25px"

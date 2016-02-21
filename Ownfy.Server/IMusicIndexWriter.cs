@@ -5,6 +5,7 @@
 namespace Ownfy.Server
 {
 	using System.Threading.Tasks;
+	using Core;
 
 	public interface IMusicIndexWriter
 	{

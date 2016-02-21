@@ -6,6 +6,7 @@ namespace Ownfy.Server
 {
 	using System;
 	using System.Collections.Generic;
+	using Core;
 	using Lucene.Net.Documents;
 
 	public class LuceneDocumentMapper

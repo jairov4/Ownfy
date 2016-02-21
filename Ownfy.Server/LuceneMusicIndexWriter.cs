@@ -5,13 +5,14 @@
 namespace Ownfy.Server
 {
 	using System.Threading.Tasks;
+	using Core;
 	using Lucene.Net.Analysis.Standard;
 	using Lucene.Net.Documents;
 	using Lucene.Net.Index;
 	using Lucene.Net.Store;
 	using Lucene.Net.Util;
 	using static System.Threading.Tasks.Task;
-	using static CodeContracts;
+	using static Core.CodeContracts;
 
 	public class LuceneMusicIndexWriter : IMusicIndexWriter
 	{

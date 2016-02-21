@@ -7,6 +7,7 @@ namespace Ownfy.Server
 	using System.Collections.Generic;
 	using System.IO;
 	using System.Threading.Tasks;
+	using Core;
 
 	public interface IMusicRepository
 	{

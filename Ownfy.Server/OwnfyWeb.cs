@@ -9,7 +9,7 @@ namespace Ownfy.Server
 	using System.Text.RegularExpressions;
 	using Nancy;
 	using Newtonsoft.Json;
-	using static CodeContracts;
+	using static Core.CodeContracts;
 
 	public class OwnfyWeb : NancyModule
 	{

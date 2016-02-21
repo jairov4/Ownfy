@@ -9,8 +9,9 @@ namespace Ownfy.Server
 	using System.Diagnostics;
 	using System.IO;
 	using System.Threading.Tasks;
+	using Core;
 	using Id3;
-	using static CodeContracts;
+	using static Core.CodeContracts;
 
 	public class MusicIndexer
 	{

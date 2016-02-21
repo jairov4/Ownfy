@@ -1,8 +1,8 @@
-﻿// <copyright company="Skivent Ltda.">
+// <copyright company="Skivent Ltda.">
 // Copyright (c) 2013, All Right Reserved, http://www.skivent.com.co/
 // </copyright>
 
-namespace Ownfy.Server
+namespace Ownfy.Core
 {
 	using System;
 	using static CodeContracts;

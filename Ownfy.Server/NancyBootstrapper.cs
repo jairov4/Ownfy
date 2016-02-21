@@ -10,7 +10,7 @@ namespace Ownfy.Server
 	using Nancy;
 	using Nancy.Bootstrapper;
 	using Nancy.Bootstrappers.Autofac;
-	using static CodeContracts;
+	using static Core.CodeContracts;
 
 	/// <summary>
 	/// Bootstrapper that adapts Nancy to use a prepared <see cref="Autofac"/> container
