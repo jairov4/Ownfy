@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
     android:padding="10dp"
     android:id="@+id/ItemView">
     <LinearLayout
@@ -11,28 +11,25 @@
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:layout_weight="1">
-        <TextView
+        <TextView xmlns:tools="http://schemas.android.com/tools"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/ArtistText"
-            xmlns:tools="http://schemas.android.com/tools"
             tools:text="Rhapsody of Fire" />
-        <TextView
+        <TextView xmlns:tools="http://schemas.android.com/tools"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/TitleText"
-            xmlns:tools="http://schemas.android.com/tools"
             tools:text="The Dark Tower of Abyss" />
     </LinearLayout>
-    <TextView
+    <TextView xmlns:tools="http://schemas.android.com/tools"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/LengthText"
         android:layout_gravity="center_vertical"
         android:layout_weight="0"
-        xmlns:tools="http://schemas.android.com/tools"
         tools:text="05:23" />
 </LinearLayout>

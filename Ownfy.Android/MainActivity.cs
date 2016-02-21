@@ -12,9 +12,7 @@ namespace Ownfy.Android
 	using global::Android.App;
 	using global::Android.Media;
 	using global::Android.OS;
-	using global::Android.Util;
 	using global::Android.Widget;
-	using Java.IO;
 	using Org.Json;
 
 	[Activity(Label = "Ownfy.Android", MainLauncher = true, Icon = "@drawable/icon")]
@@ -63,13 +61,48 @@ namespace Ownfy.Android
 		{
 			var arr = new JSONArray(ret);
 			var list = new List<Song>();
-			for (var i = 0; i<arr.Length(); i++)
+			for (var i = 0; i < arr.Length(); i++)
 			{
-				var item = arr.Get(i);
-				//var song = new Song();
+				var item = (JSONObject)arr.Get(i);
+				var id = item.GetInt("id");
+				var name = item.GetString("name");
+				var relativePath = item.GetString("relativePath");
+				var artist = item.GetString("artist");
+				var lenght = this.JsonToTimeSpan(item.GetJSONObject("length"));
+				var lastModified = DateTime.Parse(item.GetString("lastModified"));
+				var fileLenght = item.GetInt("fileLength");
+				var song = new Song(id,
+					name,
+					relativePath,
+					artist,
+					lenght,
+					lastModified,
+					fileLenght);
+				list.Add(song);
 			}
 
 			return list;
+		}
+
+		private DateTime JsonToDateTime(JSONObject date)
+		{
+			var year = date.GetInt("year");
+			var month = date.GetInt("month");
+			var day = date.GetInt("day");
+			var hour = date.GetInt("hour");
+			var minute = date.GetInt("minute");
+			var second = date.GetInt("second");
+			return new DateTime(year, month, day, hour, minute, second);
+		}
+
+		private TimeSpan JsonToTimeSpan(JSONObject time)
+		{
+			var days = time.GetInt("days");
+			var hours = time.GetInt("hours");
+			var minutes = time.GetInt("minutes");
+			var seconds = time.GetInt("seconds");
+			var milliseconds = time.GetInt("milliseconds");			
+			return new TimeSpan(days, hours, minutes, seconds, milliseconds);
 		}
 
 

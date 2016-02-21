@@ -34,10 +34,12 @@ namespace Ownfy.Server
 						return;
 					}
 
-					var nancyHost = new NancyHost(new NancyBootstrapper(container), new Uri(Settings.Default.BaseAddress));
-					nancyHost.Start();
-					Console.ReadKey();
-					nancyHost.Stop();
+					using (var nancyHost = new NancyHost(new NancyBootstrapper(container), new Uri(Settings.Default.BaseAddress)))
+					{
+						nancyHost.Start();
+						Console.ReadKey();
+						nancyHost.Stop();
+					}
 				}
 #if !DEBUG
 				catch (Exception e)
