@@ -6,6 +6,7 @@ namespace Ownfy.Server
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Linq;
 	using Core;
 	using Lucene.Net.Documents;
 
@@ -34,19 +35,17 @@ namespace Ownfy.Server
 				Field.Index.NOT_ANALYZED));
 		}
 
-		public IEnumerable<Song> GetSongs(IEnumerable<Tuple<int, Document>> documents)
+		public IEnumerable<Song> GetSongs(IEnumerable<Tuple<int, Document>> documents, bool skipRelativePath = true)
 		{
-			foreach (var pair in documents)
-			{
-				var document = pair.Item2;
-				var name = document.Get(nameof(Song.Name)) ?? string.Empty;
-				var relativePath = document.Get(nameof(Song.RelativePath)) ?? string.Empty;
-				var artist = document.Get(nameof(Song.Artist)) ?? string.Empty;
-				var fileLength = int.Parse(document.Get(nameof(Song.FileLength)) ?? "0");
-				var length = int.Parse(document.Get(nameof(Song.Length)) ?? "0");
-				var lastModified = DateTools.StringToDate(document.Get(nameof(Song.LastModified)));
-
-				var song = new Song(
+			return from pair in documents
+				let document = pair.Item2
+				let name = document.Get(nameof(Song.Name)) ?? string.Empty
+				let relativePath = skipRelativePath ? string.Empty : (document.Get(nameof(Song.RelativePath)) ?? string.Empty)
+				let artist = document.Get(nameof(Song.Artist)) ?? string.Empty
+				let fileLength = int.Parse(document.Get(nameof(Song.FileLength)) ?? "0")
+				let length = int.Parse(document.Get(nameof(Song.Length)) ?? "0")
+				let lastModified = DateTools.StringToDate(document.Get(nameof(Song.LastModified)))
+				select new Song(
 					pair.Item1,
 					name,
 					relativePath,
@@ -54,8 +53,6 @@ namespace Ownfy.Server
 					TimeSpan.FromMilliseconds(length),
 					lastModified,
 					fileLength);
-				yield return song;
-			}
 		}
 	}
 }

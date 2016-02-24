@@ -71,23 +71,19 @@ namespace Ownfy.Android
 
 		private void ShowListView()
 		{
+			if (this.switcher.CurrentView != this.loadingMessage) return;
+			this.switcher.Reset();
 			if (this.switcher.CurrentView == this.loadingMessage)
-			{
-				this.switcher.Reset();
-				if (this.switcher.CurrentView == this.loadingMessage)
-					this.switcher.ShowNext();
-			}
+				this.switcher.ShowNext();
 		}
 
 		private void ShowListViewMessage(string message)
 		{
 			this.loadingMessage.Text = message;
+			if (this.switcher.CurrentView != this.listView) return;
+			this.switcher.Reset();
 			if (this.switcher.CurrentView == this.listView)
-			{
-				this.switcher.Reset();
-				if (this.switcher.CurrentView == this.listView)
-					this.switcher.ShowNext();
-			}
+				this.switcher.ShowNext();
 		}
 
 		private async void ListView_ItemClick(object sender, AdapterView.ItemClickEventArgs e)
@@ -140,6 +136,10 @@ namespace Ownfy.Android
 			catch (Exception ex)
 			{
 				this.ShowListViewMessage($"Error loading search results: {ex.Message}");
+			}
+			finally
+			{
+				this.searchToken = null;
 			}
 		}
 
