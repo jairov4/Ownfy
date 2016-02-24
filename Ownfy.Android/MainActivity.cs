@@ -7,17 +7,20 @@ namespace Ownfy.Android
 	using System;
 	using System.Collections.Generic;
 	using System.Net;
-	using System.Threading.Tasks;
 	using Core;
 	using global::Android.App;
 	using global::Android.Media;
 	using global::Android.OS;
+	using global::Android.Views;
 	using global::Android.Widget;
 	using Org.Json;
+	using static System.Threading.Tasks.Task;
+	using Uri = global::Android.Net.Uri;
 
 	[Activity(Label = "Ownfy.Android", MainLauncher = true, Icon = "@drawable/icon")]
 	public class MainActivity : Activity
 	{
+		private SongResultsAdapter adapter;
 		private ListView listView;
 		private MediaPlayer player;
 
@@ -25,21 +28,31 @@ namespace Ownfy.Android
 		{
 			base.OnCreate(bundle);
 
-			// Set our view from the "main" layout resource
 			this.SetContentView(Resource.Layout.Main);
 
-			var playButton = this.FindViewById<Button>(Resource.Id.PlayButton);
-			var pauseButton = this.FindViewById<Button>(Resource.Id.PauseButton);
+			var playButton = this.FindViewById<Button>(Resource.Id.PlayPauseButton);
 			var stopButton = this.FindViewById<Button>(Resource.Id.StopButton);
 			var searchView = this.FindViewById<SearchView>(Resource.Id.SearchView);
 			this.listView = this.FindViewById<ListView>(Resource.Id.listView1);
+			this.adapter = new SongResultsAdapter(this, new Song[0]);
 			this.player = new MediaPlayer();
-
+			
 			playButton.Click += this.PlayButton_Click;
-			pauseButton.Click += this.PauseButton_Click;
 			stopButton.Click += this.StopButton_Click;
 			searchView.QueryTextSubmit += this.SearchView_QueryTextSubmit;
 			searchView.QueryTextChange += this.SearchView_QueryTextChange;
+			this.listView.ItemClick += this.ListView_ItemClick;
+		}
+
+		private async void ListView_ItemClick(object sender, AdapterView.ItemClickEventArgs e)
+		{
+			var song = this.adapter.GetItem(e.Position);
+			var url = Uri.Parse("http://hq.skivent.com.co:8080/stream/" + song.Id);
+			await Run(() => this.player.Reset());
+			
+			this.player.SetDataSource(this, url);
+			await Run(() => this.player.Prepare());
+			this.player.Start();
 		}
 
 		private void SearchView_QueryTextChange(object sender, SearchView.QueryTextChangeEventArgs e)
@@ -48,13 +61,14 @@ namespace Ownfy.Android
 
 		private async void SearchView_QueryTextSubmit(object sender, SearchView.QueryTextSubmitEventArgs e)
 		{
+			this.adapter.Clear();
 			var client = new WebClient();
 			var qstring = e.Query.Replace(".", string.Empty).Replace("/", string.Empty);
-			var uri = new Uri("http://192.168.0.6:7565/search/" + qstring + ".json", UriKind.Absolute);
-			var ret = await Task.Run(() => client.DownloadString(uri));
+			var uri = new System.Uri("http://hq.skivent.com.co:8080/search/" + qstring + ".json", UriKind.Absolute);
+			var ret = await Run(() => client.DownloadString(uri));
 			var songs = this.MapSongs(ret);
-			var adapter = new SongResultsAdapter(this, songs);
-			this.listView.Adapter = adapter;
+			this.adapter = new SongResultsAdapter(this, songs);
+			this.listView.Adapter = this.adapter;
 		}
 
 		private List<Song> MapSongs(string ret)
@@ -83,28 +97,26 @@ namespace Ownfy.Android
 
 			return list;
 		}
-		
+
 		private TimeSpan JsonToTimeSpan(JSONObject time)
 		{
 			var days = time.GetInt("days");
 			var hours = time.GetInt("hours");
 			var minutes = time.GetInt("minutes");
 			var seconds = time.GetInt("seconds");
-			var milliseconds = time.GetInt("milliseconds");			
+			var milliseconds = time.GetInt("milliseconds");
 			return new TimeSpan(days, hours, minutes, seconds, milliseconds);
 		}
 
-
 		private void StopButton_Click(object sender, EventArgs e)
 		{
-		}
-
-		private void PauseButton_Click(object sender, EventArgs e)
-		{
+			this.player.Stop();
 		}
 
 		private void PlayButton_Click(object sender, EventArgs e)
 		{
+			if (this.player.IsPlaying) this.player.Pause();
+			else this.player.Start();
 		}
 	}
 }

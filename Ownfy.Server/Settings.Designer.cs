@@ -25,7 +25,7 @@ namespace Ownfy.Server {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost:7565/")]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost:8080/")]
         public string BaseAddress {
             get {
                 return ((string)(this["BaseAddress"]));

@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="BaseAddress" Type="System.String" Scope="User">
-      <Value Profile="(Default)">http://localhost:7565/</Value>
+      <Value Profile="(Default)">http://localhost:8080/</Value>
     </Setting>
     <Setting Name="LibraryFolder" Type="System.String" Scope="User">
       <Value Profile="(Default)">D:\Users\JairoAndres\Music</Value>
