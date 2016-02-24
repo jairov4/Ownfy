@@ -9,14 +9,26 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/SearchView" />
-    <ListView
-        android:minWidth="25px"
-        android:minHeight="25px"
+    <ViewSwitcher
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/listView1"
         android:layout_gravity="fill_vertical"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        android:id="@+id/ViewSwitcher">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/LoadingMessage"
+            android:text="Searching..."
+            android:layout_weight="1"
+            android:gravity="center" />
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/listView1"
+            android:layout_gravity="fill_vertical"
+            android:layout_weight="1" />
+    </ViewSwitcher>
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="fill_parent"
@@ -29,7 +41,8 @@
             android:layout_gravity="center_vertical"
             android:layout_weight="1" />
         <TextView
-            android:text="Time"
+            android:id="@+id/TimeDisplay"
+            android:text=""
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="5dp" />
