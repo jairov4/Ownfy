@@ -61,7 +61,7 @@ namespace Ownfy.Server
 		public Stream GetSongStream(int id)
 		{
 			var doc = this.searcher.Doc(id);
-			var song = this.mapper.GetSongs(new[] { Tuple.Create(id, doc) }).First();
+			var song = this.mapper.GetSongs(new[] { Tuple.Create(id, doc) }, false).First();
 			return File.OpenRead(song.RelativePath);
 		}
 
